@@ -1,0 +1,192 @@
+object Form1: TForm1
+  Left = 275
+  Height = 476
+  Top = 168
+  Width = 754
+  BorderStyle = bsDialog
+  Caption = 'NERV'
+  ClientHeight = 476
+  ClientWidth = 754
+  OnClose = FormClose
+  OnCreate = FormCreate
+  LCLVersion = '1.8.2.0'
+  object StringGrid1: TStringGrid
+    Left = 0
+    Height = 472
+    Top = 0
+    Width = 584
+    ColCount = 8
+    Columns = <    
+      item
+        Alignment = taCenter
+        Title.Caption = 'Производитель'
+        Width = 92
+      end    
+      item
+        Alignment = taCenter
+        Title.Caption = 'Диагональ'
+        Width = 70
+      end    
+      item
+        Title.Caption = 'Процессор'
+        Width = 79
+      end    
+      item
+        Title.Caption = 'Частота'
+        Width = 74
+      end    
+      item
+        Title.Caption = 'ОЗУ'
+        Width = 64
+      end    
+      item
+        Title.Caption = 'HDD/SSD'
+        Width = 72
+      end    
+      item
+        Title.Caption = 'Вес'
+        Width = 64
+      end    
+      item
+        Title.Caption = 'Цена'
+        Width = 64
+      end>
+    FixedCols = 0
+    TabOrder = 0
+    ColWidths = (
+      92
+      70
+      79
+      74
+      64
+      72
+      64
+      64
+    )
+    Cells = (
+      1
+      0
+      0
+      'Производитель'
+    )
+  end
+  object Button1: TButton
+    Left = 592
+    Height = 25
+    Top = 32
+    Width = 155
+    Caption = 'Длина списка'
+    OnClick = Button1Click
+    TabOrder = 1
+  end
+  object Button2: TButton
+    Left = 591
+    Height = 25
+    Top = 120
+    Width = 155
+    Caption = 'Добавить элемент'
+    OnClick = Button2Click
+    TabOrder = 2
+  end
+  object Button3: TButton
+    Left = 592
+    Height = 25
+    Top = 320
+    Width = 155
+    Caption = 'Найти по условию'
+    OnClick = Button3Click
+    TabOrder = 3
+  end
+  object Button4: TButton
+    Left = 592
+    Height = 25
+    Top = 344
+    Width = 155
+    Caption = 'Удалить по условию'
+    OnClick = Button4Click
+    TabOrder = 4
+  end
+  object Button5: TButton
+    Left = 592
+    Height = 25
+    Top = 440
+    Width = 155
+    Caption = 'printer'
+    OnClick = Button5Click
+    TabOrder = 5
+  end
+  object Button6: TButton
+    Left = 592
+    Height = 25
+    Top = 56
+    Width = 155
+    Caption = 'Проверка на пустоту'
+    OnClick = Button6Click
+    TabOrder = 6
+  end
+  object Button7: TButton
+    Left = 592
+    Height = 25
+    Top = 80
+    Width = 155
+    Caption = 'Удаление списка'
+    OnClick = Button7Click
+    TabOrder = 7
+  end
+  object Button8: TButton
+    Left = 592
+    Height = 25
+    Top = 384
+    Width = 154
+    Caption = 'Удалить выбранный'
+    OnClick = Button8Click
+    TabOrder = 8
+  end
+  object listb1: TRadioButton
+    Left = 592
+    Height = 19
+    Top = 8
+    Width = 70
+    Caption = 'Список 1'
+    Checked = True
+    OnChange = listb1Change
+    TabOrder = 10
+    TabStop = True
+  end
+  object list2b: TRadioButton
+    Left = 676
+    Height = 19
+    Top = 8
+    Width = 70
+    Caption = 'Список 2'
+    OnChange = list2bChange
+    TabOrder = 9
+  end
+  object Button9: TButton
+    Left = 592
+    Height = 25
+    Top = 408
+    Width = 155
+    Caption = 'Изменить выбранный'
+    OnClick = Button9Click
+    TabOrder = 11
+  end
+  object Button10: TButton
+    Left = 592
+    Height = 25
+    Top = 200
+    Width = 155
+    Caption = 'Найти минимальный по...'
+    OnClick = Button10Click
+    TabOrder = 12
+  end
+  object Button11: TButton
+    Left = 592
+    Height = 25
+    Top = 224
+    Width = 155
+    Caption = 'Найти максимальный по...'
+    OnClick = Button11Click
+    TabOrder = 13
+  end
+end
