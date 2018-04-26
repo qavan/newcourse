@@ -1,7 +1,7 @@
 object Form1: TForm1
-  Left = 288
+  Left = 751
   Height = 468
-  Top = 122
+  Top = 225
   Width = 600
   BorderStyle = bsSingle
   Caption = 'NERV'
@@ -127,9 +127,6 @@ object Form1: TForm1
       Caption = 'Удалить выбранный'
       OnClick = popdelsecClick
     end
-    object popdel: TMenuItem
-      Caption = 'Удалить по условию'
-    end
   end
   object MainMenu1: TMainMenu
     left = 96
@@ -179,7 +176,39 @@ object Form1: TForm1
       end
     end
     object menusort: TMenuItem
-      Caption = 'Сортировка по цене'
+      Caption = 'Сортировать по '
+      object sortbym: TMenuItem
+        Caption = 'производителю'
+        OnClick = sortbymClick
+      end
+      object sortbyd: TMenuItem
+        Caption = 'диагонали'
+        OnClick = sortbydClick
+      end
+      object sortbyp: TMenuItem
+        Caption = 'процессору'
+        OnClick = sortbypClick
+      end
+      object sortbyf: TMenuItem
+        Caption = 'частоте процессора'
+        OnClick = sortbyfClick
+      end
+      object sortbyr: TMenuItem
+        Caption = 'ОЗУ'
+        OnClick = sortbyrClick
+      end
+      object sortbyh: TMenuItem
+        Caption = 'HDD/SSD'
+        OnClick = sortbyhClick
+      end
+      object sortbyw: TMenuItem
+        Caption = 'весу'
+        OnClick = sortbywClick
+      end
+      object sortbyc: TMenuItem
+        Caption = 'цене'
+        OnClick = sortbycClick
+      end
     end
   end
 end

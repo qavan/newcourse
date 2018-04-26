@@ -37,6 +37,14 @@ type
     MenuItem3: TMenuItem;
     checklist1: TMenuItem;
     checklist2: TMenuItem;
+    sortbyp: TMenuItem;
+    sortbym: TMenuItem;
+    sortbyc: TMenuItem;
+    sortbyh: TMenuItem;
+    sortbyw: TMenuItem;
+    sortbyr: TMenuItem;
+    sortbyd: TMenuItem;
+    sortbyf: TMenuItem;
     menusort: TMenuItem;
     menulistlen2: TMenuItem;
     menulistlen: TMenuItem;
@@ -46,7 +54,6 @@ type
     menulist: TMenuItem;
     menulistdel: TMenuItem;
     popdelsec: TMenuItem;
-    popdel: TMenuItem;
     popedit: TMenuItem;
     popadd: TMenuItem;
     popfindmax: TMenuItem;
@@ -57,22 +64,29 @@ type
     procedure Button5Click(Sender: TObject);
     procedure checklist1Click(Sender: TObject);
     procedure checklist2Click(Sender: TObject);
-    procedure Edit1Change(Sender: TObject);
     procedure Edit1Click(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCreate(Sender: TObject);
-    //procedure MenuItem1Click(Sender: TObject);
     procedure MenuItem2Click(Sender: TObject);
     procedure MenuItem3Click(Sender: TObject);
     procedure menulist1Click(Sender: TObject);
     procedure menulist2Click(Sender: TObject);
     procedure menulistlen1Click(Sender: TObject);
     procedure menulistlen2Click(Sender: TObject);
+    procedure menusortClick(Sender: TObject);
     procedure popaddClick(Sender: TObject);
     procedure popdelsecClick(Sender: TObject);
     procedure popeditClick(Sender: TObject);
     procedure popfindmaxClick(Sender: TObject);
     procedure popfindminClick(Sender: TObject);
+    procedure sortbycClick(Sender: TObject);
+    procedure sortbydClick(Sender: TObject);
+    procedure sortbyfClick(Sender: TObject);
+    procedure sortbyhClick(Sender: TObject);
+    procedure sortbymClick(Sender: TObject);
+    procedure sortbypClick(Sender: TObject);
+    procedure sortbyrClick(Sender: TObject);
+    procedure sortbywClick(Sender: TObject);
     procedure StringGrid1MouseDown(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
   private
@@ -80,8 +94,6 @@ type
   public
 
   end;
-
-//////////
 /////var
 var
   Form1: TForm1;
@@ -368,17 +380,19 @@ var n:integer;min:string;
 begin
 if (i=0) or (i=2) then
  begin
- min:='aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa';
+ min:='';
  if i=0 then
   for n:=1 to listlength(L) do
    begin
-   if L^.manufacturer.Length<min.Length then min:=L^.manufacturer;
+   if min='' then min:=L^.manufacturer;
+   if L^.manufacturer<min then min:=L^.manufacturer;
    L:=L^.next;
    end
   else if i=2 then
   for n:=1 to listlength(L) do
    begin
-   if L^.processor.Length<min.Length then min:=L^.processor;
+   if min='' then min:=L^.processor;
+   if L^.processor<min then min:=L^.processor;
    L:=L^.next;
    end;
  end
@@ -386,103 +400,113 @@ else if  (i=4) or (i=5) or (i=7) then
  begin
  min:='1000000000';
  if i=4 then
-  for n:=1 to listlength(L) do
+for n:=1 to listlength(L) do
    begin
    if L^.ram<StrToInt(min) then min:=IntToStr(L^.ram);
    L:=L^.next;
    end
-  else  if i=5 then
+else  if i=5 then
   for n:=1 to listlength(L) do
    begin
    if L^.hddssd<StrToInt(min) then min:=IntToStr(L^.hddssd);
    L:=L^.next;
    end
-  else  if i=7 then
+else  if i=7 then
   for n:=1 to listlength(L) do
    begin
    if L^.cost<StrToInt(min) then min:=IntToStr(L^.cost);
    L:=L^.next;
    end
  end
-else if (i=1) or (i=6) then
+else if (i=1) or (i=3) or (i=6) then
  begin
  min:='100000000';
- if i=1 then
+if i=1 then
   for n:=1 to listlength(L) do
    begin
    if L^.diagonal<StrToFloat(min) then min:=FloatToStr(L^.diagonal);
    L:=L^.next;
    end
-  else if i=6 then
+else if i=3 then
   for n:=1 to listlength(L) do
    begin
    if L^.frequency<StrToFloat(min) then min:=FloatToStr(L^.frequency);
    L:=L^.next;
+   end
+else if i=6 then
+  for n:=1 to listlength(L) do
+   begin
+   if L^.weight<StrToFloat(min) then min:=FloatToStr(L^.weight);
+   L:=L^.next;
    end;
- end;
-Form1.StringGrid1.Selection := TGridRect(Rect(0,n,Form1.StringGrid1.ColCount-1,n));
+end;
 ShowMessage('Минимальный - '+min);
 
 end;
 procedure findmax(i:integer;L:list);//find max ()
-var n:integer;min:string;
+var n:integer;max:string;
 begin
 if (i=0) or (i=2) then
  begin
- min:='';
+ max:='';
  if i=0 then
   for n:=1 to listlength(L) do
    begin
-   if L^.manufacturer.Length>min.Length then min:=L^.manufacturer;
+   if L^.manufacturer>max then max:=L^.manufacturer;
    L:=L^.next;
    end
   else if i=2 then
   for n:=1 to listlength(L) do
    begin
-   if L^.processor.Length>min.Length then min:=L^.processor;
+   if L^.processor>max then max:=L^.processor;
    L:=L^.next;
    end;
  end
 else if  (i=4) or (i=5) or (i=7) then
  begin
- min:='-1000';
+ max:='-1';
  if i=4 then
-  for n:=1 to listlength(L) do
+for n:=1 to listlength(L) do
    begin
-   if L^.ram>StrToInt(min) then min:=IntToStr(L^.ram);
+   if L^.ram>StrToInt(max) then max:=IntToStr(L^.ram);
    L:=L^.next;
    end
-  else  if i=5 then
+else  if i=5 then
   for n:=1 to listlength(L) do
    begin
-   if L^.hddssd>StrToInt(min) then min:=IntToStr(L^.hddssd);
+   if L^.hddssd>StrToInt(max) then max:=IntToStr(L^.hddssd);
    L:=L^.next;
    end
-  else  if i=7 then
+else  if i=7 then
   for n:=1 to listlength(L) do
    begin
-   if L^.cost>StrToInt(min) then min:=IntToStr(L^.cost);
+   if L^.cost>StrToInt(max) then max:=IntToStr(L^.cost);
    L:=L^.next;
    end
  end
-else if (i=1) or (i=6) then
+else if (i=1) or (i=3) or (i=6) then
  begin
- min:='-1000';
- if i=1 then
+ max:='-1';
+if i=1 then
   for n:=1 to listlength(L) do
    begin
-   if L^.diagonal>StrToFloat(min) then min:=FloatToStr(L^.diagonal);
+   if L^.diagonal>StrToFloat(max) then max:=FloatToStr(L^.diagonal);
    L:=L^.next;
    end
-  else if i=6 then
+else if i=3 then
   for n:=1 to listlength(L) do
    begin
-   if L^.frequency>StrToFloat(min) then min:=FloatToStr(L^.frequency);
+   if L^.frequency>StrToFloat(max) then max:=FloatToStr(L^.frequency);
+   L:=L^.next;
+   end
+else if i=6 then
+  for n:=1 to listlength(L) do
+   begin
+   if L^.weight>StrToFloat(max) then max:=FloatToStr(L^.weight);
    L:=L^.next;
    end;
- end;
-ShowMessage('Максимальный - '+min);
-Form1.StringGrid1.Selection := TGridRect(Rect(0,n,Form1.StringGrid1.ColCount-1,n));
+end;
+ShowMessage('Максимальный - '+max);
 end;
 procedure searcher(i:integer;s:string;L:list);
 var r:string;j:integer;
@@ -496,7 +520,7 @@ begin
    end
   else begin
      for j:=1 to listlength(L) do begin
-     if L^.processor=s then r:=r+IntTostr(j)+' '+L^.manufacturer+' '+ FloatToStr(L^.diagonal)+' '+ L^.processor+' '+ FloatToStr(L^.frequency)+' '+ IntToStr(L^.ram)+' '+ IntToStr(L^.hddssd)+' '+ FloatToStr(L^.weight)+' '+ IntToStr(L^.cost)+#13;r+IntTostr(j)+' '+L^.processor+#13;
+     if L^.processor=s then r:=r+IntTostr(j)+' '+L^.manufacturer+' '+ FloatToStr(L^.diagonal)+' '+ L^.processor+' '+ FloatToStr(L^.frequency)+' '+ IntToStr(L^.ram)+' '+ IntToStr(L^.hddssd)+' '+ FloatToStr(L^.weight)+' '+ IntToStr(L^.cost)+#13;
    L:=L^.next;
    end;
    end;
@@ -547,7 +571,111 @@ begin
   ;
   end;
 end;
-
+procedure swipe(s:list;var p1,p2:list);//swipe ()
+begin
+ p1:=s;p2:=s^.next;
+ p1^.prev^.next:=p2;
+ p2^.next^.prev:=p1;
+ p1^.next:=p2^.next;
+ p2^.prev:=p1^.prev;
+ p2^.next:=p1;
+ p1^.prev:=p2;
+end;
+procedure sortbyparam(i:integer;var L:list); //sort ()
+var p,q1,q2:list;j:integer;
+begin
+ insert(0,'0','0','0','0','0','0','0','0',L);
+  p:=L^.next;
+  if (i=0) or (i=2) then
+   begin
+    if (i=0) then
+     begin
+       for j:=1 to listlength(L) do begin
+       while p^.next^.manufacturer<>'empty' do begin
+         if p^.manufacturer>p^.next^.manufacturer then begin
+                 swipe(p,q1,q2);
+                 end else
+                p:=p^.next;
+                 end;p:=L^.next;
+       end;
+      end
+    else
+      begin
+               for j:=1 to listlength(L) do begin  while p^.next^.manufacturer<>'empty' do begin
+                while p^.next^.manufacturer<>'empty' do begin
+                 if p^.processor>p^.next^.processor then begin
+                    swipe(p,q1,q2);;
+                   end else
+                 p:=p^.next; end;
+                end;
+               p:=L^.next;
+               end;
+       end;
+      end
+  else if (i=1) or (i=3) or (i=6) then
+   begin
+    if (i=1) then
+      begin
+           for j:=1 to listlength(L) do begin while p^.next^.manufacturer<>'empty' do begin
+                 if p^.diagonal>p^.next^.diagonal then begin
+                    swipe(p,q1,q2);
+                   end else
+                 p:=p^.next;  end;p:=L^.next;
+               end;
+       end
+    else if (i=3) then
+      begin
+           for j:=1 to listlength(L) do begin  while p^.next^.manufacturer<>'empty' do begin
+                 if p^.frequency>p^.next^.frequency then begin
+                   swipe(p,q1,q2);;
+                   end else
+                 p:=p^.next;  end;p:=L^.next;
+               end;
+      end
+    else
+      begin
+           for j:=1 to listlength(L) do begin  while p^.next^.manufacturer<>'empty' do begin
+                 if p^.weight>p^.next^.weight then begin
+                    swipe(p,q1,q2);;
+                   end else
+                 p:=p^.next;      end;p:=L^.next;
+               end;
+      end;
+   end
+  else
+    begin
+     if (i=4) then
+       begin
+             for j:=1 to listlength(L) do begin  while p^.next^.manufacturer<>'empty' do begin
+                 if p^.ram>p^.next^.ram then begin
+                    swipe(p,q1,q2);
+                   end else
+                 p:=p^.next;  end;p:=L^.next;
+               end;
+       end
+     else if (i=5) then
+       begin
+             for j:=1 to listlength(L) do begin
+              while p^.manufacturer<>'empty' do begin
+                 if p^.hddssd>p^.next^.hddssd then begin
+                    swipe(p,q1,q2);
+                   end else
+                 p:=p^.next;
+              end; p:=L^.next;
+               end;
+       end
+     else
+      begin
+          for j:=1 to listlength(L) do begin  while p^.next^.manufacturer<>'empty' do begin
+                 if p^.cost>p^.next^.cost then begin
+                    swipe(p,q1,q2);
+                   end else
+                 p:=p^.next;  end;
+               end; p:=L^.next;
+      end;
+    end;
+  del(0,L);
+end;
 ///\
 //||| Здесь разрыв, Сэр.
 ////
@@ -606,6 +734,14 @@ procedure TForm1.menulistlen2Click(Sender: TObject);// len 2
 begin
   ShowMessage('Длина списка 2 - '+IntToStr(listlength(L2)));
 end;
+
+procedure TForm1.menusortClick(Sender: TObject);
+begin
+
+end;
+
+
+
 procedure TForm1.popaddClick(Sender: TObject);// add
 begin
   Form2.rb1.Visible:=True;Form2.rb2.Visible:=True;
@@ -666,6 +802,46 @@ procedure TForm1.popfindminClick(Sender: TObject);//find min sel col
 begin
    findmin(Form1.StringGrid1.SelectedColumn.Index,L);
 end;
+procedure TForm1.sortbycClick(Sender: TObject);//sort by cost
+begin
+  sortbyparam(7,L);
+  updategrid(L);
+end;
+procedure TForm1.sortbydClick(Sender: TObject);//sort by diagonal
+begin
+  sortbyparam(1,L);
+  updategrid(L);
+end;
+procedure TForm1.sortbyfClick(Sender: TObject);//sort by frequency
+begin
+  sortbyparam(3,L);
+  updategrid(L);
+end;
+procedure TForm1.sortbyhClick(Sender: TObject);//sort by hddssd
+begin
+  sortbyparam(5,L);
+  updategrid(L);
+end;
+procedure TForm1.sortbymClick(Sender: TObject);//sort by manufacturer
+begin
+  sortbyparam(0,L);
+  updategrid(L);
+end;
+procedure TForm1.sortbypClick(Sender: TObject);
+begin
+  sortbyparam(2,L);
+  updategrid(L);
+end;
+procedure TForm1.sortbyrClick(Sender: TObject);//sort by RAM
+begin
+  sortbyparam(4,L);
+  updategrid(L);
+end;
+procedure TForm1.sortbywClick(Sender: TObject);//sort by weight
+begin
+    sortbyparam(6,L);
+  updategrid(L);
+end;
 procedure TForm1.StringGrid1MouseDown(Sender: TObject; Button: TMouseButton;// auto focus
   Shift: TShiftState; X, Y: Integer);
 var ACol, ARow: Integer;
@@ -675,7 +851,7 @@ begin
   StringGrid1.Row:=ARow;
   StringGrid1.SelectedColor:=clBlue;
 end;
-{procedure TForm1.Button3Click(Sender: TObject);//find
+{procedure TForm1.Button3Click(Sender: TObject);//find  (###)
 begin
   FindHideAllEdits(Form2);
   FindHideAllLabels(Form2);
@@ -692,7 +868,7 @@ begin
   finder(Form2.elems.ItemIndex,Form2.Edit9.Caption);
   CleanAllEdits(Form2);
 end;}
-{procedure TForm1.Button4Click(Sender: TObject);  //del
+{procedure TForm1.Button4Click(Sender: TObject);  //del  (###)
 begin
  Form2.checkbox.Visible:=True;FindHideAllEdits(Form2);FindHideAllLabels(Form2);Form2.title.Visible:=True;Form2.Edit9.Visible:=True;Form2.elems.Visible:=True;Form2.addb.Visible:=False;Form2.findb.Visible:=False;Form2.title.Caption:='Введите один из параметров для удаления';
   Form2.ShowModal;
@@ -715,7 +891,6 @@ end
 else
   searcher(StringGrid1.SelectedColumn.Index,Edit1.Text,L2);
 end;
-
 procedure TForm1.checklist1Click(Sender: TObject);// check 1
 begin
   check(L);
@@ -724,22 +899,10 @@ procedure TForm1.checklist2Click(Sender: TObject);// check 2
 begin
   check(L2);
 end;
-
-procedure TForm1.Edit1Change(Sender: TObject);
-begin
-
-end;
-
 procedure TForm1.Edit1Click(Sender: TObject);
 begin
   Edit1.Caption:='';
 end;
-
-
-
-
-
-
 procedure TForm1.FormClose(Sender: TObject; var CloseAction: TCloseAction);//FORM CLOSE ()
 var i:integer;s:string;tofile:TStringList;
 begin
@@ -753,4 +916,3 @@ begin
  tofile.SaveToFile('list.txt');
 end;
 end.
-
