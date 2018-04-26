@@ -140,11 +140,11 @@ function check(var L:list):integer;
 begin
 if L<>nil then
  begin
-  check:=1;if gl=1 then ShowMessage('Список заполнен [listlength]');
+  check:=1;if gl=1 then ShowMessage('Список заполнен [listcheck]');
  end
 else
 begin
-   if gl=1 then ShowMessage('Список пуст [listlength]');
+   if gl=1 then ShowMessage('Список пуст [listcheck]');
    check:=0;
 end;
 
@@ -361,7 +361,7 @@ begin
   p^.weight:=StrToFloat(a7);
   p^.cost:=StrToInt(a8);
 end;
-procedure finder(n:integer;value:string);//finder (###)
+{procedure finder(n:integer;value:string);//finder (###)
 var i:integer;
 begin
  for i:=1 to Form1.StringGrid1.RowCount-2 do begin
@@ -374,7 +374,7 @@ begin
       Abort; end;
       end;
    ShowMessage('Не найдено');
-end;
+end;}
 procedure findmin(i:integer;L:list);//find min()
 var n:integer;min:string;
 begin
@@ -604,7 +604,7 @@ begin
                for j:=1 to listlength(L) do begin  while p^.next^.manufacturer<>'empty' do begin
                 while p^.next^.manufacturer<>'empty' do begin
                  if p^.processor>p^.next^.processor then begin
-                    swipe(p,q1,q2);;
+                    swipe(p,q1,q2);
                    end else
                  p:=p^.next; end;
                 end;
@@ -656,7 +656,7 @@ begin
      else if (i=5) then
        begin
              for j:=1 to listlength(L) do begin
-              while p^.manufacturer<>'empty' do begin
+              while p^.next^.manufacturer<>'empty' do begin
                  if p^.hddssd>p^.next^.hddssd then begin
                     swipe(p,q1,q2);
                    end else
@@ -734,14 +734,9 @@ procedure TForm1.menulistlen2Click(Sender: TObject);// len 2
 begin
   ShowMessage('Длина списка 2 - '+IntToStr(listlength(L2)));
 end;
-
 procedure TForm1.menusortClick(Sender: TObject);
 begin
-
 end;
-
-
-
 procedure TForm1.popaddClick(Sender: TObject);// add
 begin
   Form2.rb1.Visible:=True;Form2.rb2.Visible:=True;
@@ -827,7 +822,7 @@ begin
   sortbyparam(0,L);
   updategrid(L);
 end;
-procedure TForm1.sortbypClick(Sender: TObject);
+procedure TForm1.sortbypClick(Sender: TObject);//sort by processor
 begin
   sortbyparam(2,L);
   updategrid(L);
@@ -893,11 +888,11 @@ else
 end;
 procedure TForm1.checklist1Click(Sender: TObject);// check 1
 begin
-  check(L);
+  gl:=1;check(L);gl:=0;
 end;
 procedure TForm1.checklist2Click(Sender: TObject);// check 2
 begin
-  check(L2);
+  gl:=1;check(L2);gl:=0;
 end;
 procedure TForm1.Edit1Click(Sender: TObject);
 begin
