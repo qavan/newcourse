@@ -1,20 +1,22 @@
 object Form1: TForm1
-  Left = 275
-  Height = 476
-  Top = 168
-  Width = 754
-  BorderStyle = bsDialog
+  Left = 288
+  Height = 468
+  Top = 122
+  Width = 600
+  BorderStyle = bsSingle
   Caption = 'NERV'
-  ClientHeight = 476
-  ClientWidth = 754
+  ClientHeight = 448
+  ClientWidth = 600
+  Menu = MainMenu1
   OnClose = FormClose
   OnCreate = FormCreate
   LCLVersion = '1.8.2.0'
   object StringGrid1: TStringGrid
     Left = 0
-    Height = 472
+    Height = 448
     Top = 0
-    Width = 584
+    Width = 600
+    Color = clForm
     ColCount = 8
     Columns = <    
       item
@@ -52,7 +54,9 @@ object Form1: TForm1
         Width = 64
       end>
     FixedCols = 0
+    PopupMenu = PopupMenu1
     TabOrder = 0
+    OnMouseDown = StringGrid1MouseDown
     ColWidths = (
       92
       70
@@ -70,123 +74,112 @@ object Form1: TForm1
       'Производитель'
     )
   end
-  object Button1: TButton
-    Left = 592
-    Height = 25
-    Top = 32
-    Width = 155
-    Caption = 'Длина списка'
-    OnClick = Button1Click
-    TabOrder = 1
-  end
-  object Button2: TButton
-    Left = 591
-    Height = 25
-    Top = 120
-    Width = 155
-    Caption = 'Добавить элемент'
-    OnClick = Button2Click
-    TabOrder = 2
-  end
-  object Button3: TButton
-    Left = 592
-    Height = 25
-    Top = 320
-    Width = 155
-    Caption = 'Найти по условию'
-    OnClick = Button3Click
-    TabOrder = 3
-  end
-  object Button4: TButton
-    Left = 592
-    Height = 25
-    Top = 344
-    Width = 155
-    Caption = 'Удалить по условию'
-    OnClick = Button4Click
-    TabOrder = 4
-  end
   object Button5: TButton
-    Left = 592
+    Left = 581
     Height = 25
-    Top = 440
-    Width = 155
+    Top = 0
+    Width = 19
     Caption = 'printer'
     OnClick = Button5Click
-    TabOrder = 5
+    TabOrder = 1
   end
-  object Button6: TButton
-    Left = 592
+  object Edit1: TEdit
+    Left = 0
+    Height = 23
+    Top = 424
+    Width = 472
+    OnClick = Edit1Click
+    TabOrder = 2
+    Text = 'Поиск по характеристикам выбранного столбца'
+  end
+  object Button1: TButton
+    Left = 472
     Height = 25
-    Top = 56
-    Width = 155
-    Caption = 'Проверка на пустоту'
-    OnClick = Button6Click
-    TabOrder = 6
+    Top = 423
+    Width = 128
+    Caption = 'Поиск'
+    OnClick = Button1Click
+    TabOrder = 3
   end
-  object Button7: TButton
-    Left = 592
-    Height = 25
-    Top = 80
-    Width = 155
-    Caption = 'Удаление списка'
-    OnClick = Button7Click
-    TabOrder = 7
+  object PopupMenu1: TPopupMenu
+    left = 152
+    top = 184
+    object popadd: TMenuItem
+      Caption = 'Добавить элемент'
+      OnClick = popaddClick
+    end
+    object popedit: TMenuItem
+      Caption = 'Изменить элемент'
+      OnClick = popeditClick
+    end
+    object MenuItem1: TMenuItem
+      Caption = 'Найти'
+      object popfindmax: TMenuItem
+        Caption = 'Максимальный по выбранному столбцу'
+        OnClick = popfindmaxClick
+      end
+      object popfindmin: TMenuItem
+        Caption = 'Минимальный по выбранному столбцу'
+        OnClick = popfindminClick
+      end
+    end
+    object popdelsec: TMenuItem
+      Caption = 'Удалить выбранный'
+      OnClick = popdelsecClick
+    end
+    object popdel: TMenuItem
+      Caption = 'Удалить по условию'
+    end
   end
-  object Button8: TButton
-    Left = 592
-    Height = 25
-    Top = 384
-    Width = 154
-    Caption = 'Удалить выбранный'
-    OnClick = Button8Click
-    TabOrder = 8
-  end
-  object listb1: TRadioButton
-    Left = 592
-    Height = 19
-    Top = 8
-    Width = 70
-    Caption = 'Список 1'
-    Checked = True
-    OnChange = listb1Change
-    TabOrder = 10
-    TabStop = True
-  end
-  object list2b: TRadioButton
-    Left = 676
-    Height = 19
-    Top = 8
-    Width = 70
-    Caption = 'Список 2'
-    OnChange = list2bChange
-    TabOrder = 9
-  end
-  object Button9: TButton
-    Left = 592
-    Height = 25
-    Top = 408
-    Width = 155
-    Caption = 'Изменить выбранный'
-    OnClick = Button9Click
-    TabOrder = 11
-  end
-  object Button10: TButton
-    Left = 592
-    Height = 25
-    Top = 200
-    Width = 155
-    Caption = 'Найти минимальный по...'
-    OnClick = Button10Click
-    TabOrder = 12
-  end
-  object Button11: TButton
-    Left = 592
-    Height = 25
-    Top = 224
-    Width = 155
-    Caption = 'Найти максимальный по...'
-    OnClick = Button11Click
-    TabOrder = 13
+  object MainMenu1: TMainMenu
+    left = 96
+    top = 184
+    object main: TMenuItem
+      Caption = 'Проверка на существование'
+      object checklist1: TMenuItem
+        Caption = 'Списка 1'
+        OnClick = checklist1Click
+      end
+      object checklist2: TMenuItem
+        Caption = 'Список 2'
+        OnClick = checklist2Click
+      end
+    end
+    object menulistlen: TMenuItem
+      Caption = 'Длина'
+      object menulistlen1: TMenuItem
+        Caption = 'Длина списка 1'
+        OnClick = menulistlen1Click
+      end
+      object menulistlen2: TMenuItem
+        Caption = 'Длина списка 2'
+        OnClick = menulistlen2Click
+      end
+    end
+    object menulist: TMenuItem
+      Caption = 'Текущий список #1'
+      object menulist1: TMenuItem
+        Caption = 'Список 1'
+        OnClick = menulist1Click
+      end
+      object menulist2: TMenuItem
+        Caption = 'Список 2'
+        OnClick = menulist2Click
+      end
+    end
+    object menulistdel: TMenuItem
+      Caption = 'Удалить'
+      object MenuItem2: TMenuItem
+        Caption = 'Список 1'
+        OnClick = MenuItem2Click
+      end
+      object MenuItem3: TMenuItem
+        Caption = 'Список 2'
+        OnClick = MenuItem3Click
+      end
+    end
+    object menusort: TMenuItem
+      Caption = 'Сортировка по цене'
+    end
   end
 end

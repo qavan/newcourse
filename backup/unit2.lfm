@@ -3,7 +3,7 @@ object Form2: TForm2
   Height = 166
   Top = 264
   Width = 530
-  Caption = 'G.H.Q.'
+  Caption = 'Central Dogma'
   ClientHeight = 166
   ClientWidth = 530
   DefaultMonitor = dmMainForm
@@ -141,15 +141,6 @@ object Form2: TForm2
     OnClick = addbClick
     TabOrder = 8
   end
-  object delb: TButton
-    Left = 128
-    Height = 25
-    Top = 136
-    Width = 235
-    Caption = 'Удалить'
-    OnClick = delbClick
-    TabOrder = 9
-  end
   object title: TLabel
     Left = 142
     Height = 15
@@ -158,15 +149,6 @@ object Form2: TForm2
     Caption = 'NaN'
     ParentColor = False
   end
-  object findb: TButton
-    Left = 128
-    Height = 25
-    Top = 136
-    Width = 233
-    Caption = 'Найти'
-    OnClick = findbClick
-    TabOrder = 10
-  end
   object rb1: TRadioButton
     Left = 123
     Height = 19
@@ -174,7 +156,7 @@ object Form2: TForm2
     Width = 126
     Caption = 'После выбранного'
     Checked = True
-    TabOrder = 12
+    TabOrder = 10
     TabStop = True
     Visible = False
   end
@@ -184,35 +166,8 @@ object Form2: TForm2
     Top = 112
     Width = 106
     Caption = 'До выбранного'
-    TabOrder = 11
+    TabOrder = 9
     Visible = False
-  end
-  object elems: TComboBox
-    Left = 104
-    Height = 23
-    Top = 64
-    Width = 132
-    ItemHeight = 15
-    Items.Strings = (
-      'Производитель'
-      'Диагональ'
-      'Процессор'
-      'Тактовая частота'
-      'ОЗУ'
-      'SSD/HDD'
-      'Вес'
-      'Цена'
-    )
-    Style = csDropDownList
-    TabOrder = 13
-  end
-  object Edit9: TEdit
-    Left = 243
-    Height = 23
-    Top = 64
-    Width = 152
-    TabOrder = 14
-    Text = 'Edit9'
   end
   object checkbox: TCheckBox
     Left = 208
@@ -220,7 +175,7 @@ object Form2: TForm2
     Top = 104
     Width = 85
     Caption = 'Удалить все'
-    TabOrder = 15
+    TabOrder = 11
     Visible = False
   end
 end

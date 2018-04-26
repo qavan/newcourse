@@ -1,11 +1,12 @@
-unit Unit2;
+unit unit2;
 
 {$mode objfpc}{$H+}
 
 interface
 
 uses
-  Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls;
+  Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls,
+  Menus;
 
 type
 
@@ -14,10 +15,6 @@ type
   TForm2 = class(TForm)
     addb: TButton;
     checkbox: TCheckBox;
-    elems: TComboBox;
-    Edit9: TEdit;
-    findb: TButton;
-    delb: TButton;
     Edit1: TEdit;
     Edit2: TEdit;
     Edit3: TEdit;
@@ -67,7 +64,7 @@ end;
 
 procedure TForm2.Button1Click(Sender: TObject);
 begin
-  ShowMessage(elems.ItemIndex.ToString);
+  //ShowMessage(elems.ItemIndex.ToString);
 end;
 
 procedure TForm2.delbClick(Sender: TObject);
@@ -77,13 +74,11 @@ end;
 
 procedure TForm2.findbClick(Sender: TObject);
 begin
-   Form2.findb.Tag:=0;
-   Form2.Close;
+
 end;
 
 procedure TForm2.FormActivate(Sender: TObject);
 begin
-  findb.Tag:=1;
   Form2.Tag:=1;
   addb.Tag:=1;
 end;
