@@ -77,7 +77,6 @@ type
     procedure menulistconnectClick(Sender: TObject);
     procedure menulistlen1Click(Sender: TObject);
     procedure menulistlen2Click(Sender: TObject);
-    procedure menusortClick(Sender: TObject);
     procedure popaddClick(Sender: TObject);
     procedure popdelsecClick(Sender: TObject);
     procedure popeditClick(Sender: TObject);
@@ -100,13 +99,9 @@ type
   public
 
   end;
-/////var
 var
-  Form1: TForm1;
-  tslist,t:TStringList;
-  p1,p2,p3,p4,p5,p6,p7,p8:string;
-  L,L2:list;
-  gl:integer;
+  Form1: TForm1;tslist,t:TStringList;p1,p2,p3,p4,p5,p6,p7,p8:string;
+  L,L2:list;gl:integer;
 
 implementation
 uses unit2;
@@ -304,12 +299,10 @@ var i,j:integer;
 begin
  if check(L)=0 then
   begin
-   //for i:=1 to Form1.StringGrid1.RowCount;
    for i:=1 to Form1.StringGrid1.RowCount-1 do
     begin
       Form1.StringGrid1.Rows[i][0]:='' ;Form1.StringGrid1.Rows[i][1]:='' ;Form1.StringGrid1.Rows[i][2]:='' ;Form1.StringGrid1.Rows[i][3]:='' ;Form1.StringGrid1.Rows[i][4]:='' ;Form1.StringGrid1.Rows[i][5]:='' ;Form1.StringGrid1.Rows[i][6]:='' ;Form1.StringGrid1.Rows[i][7]:='' ;
     end;
-
   end
 else
 begin
@@ -373,20 +366,6 @@ begin
   p^.weight:=StrToFloat(a7);
   p^.cost:=StrToInt(a8);
 end;
-{procedure finder(n:integer;value:string);//finder (###)
-var i:integer;
-begin
- for i:=1 to Form1.StringGrid1.RowCount-2 do begin
-   if Form1.StringGrid1.Rows[i][n]=value then begin
-      Form1.StringGrid1.Row:=i+1;
-      Form1.StringGrid1.Selection := TGridRect(Rect(0,i,Form1.StringGrid1.RowCount-n-1,i));
-      Form1.StringGrid1.SelectedColor:=clRed;
-      //Form1.StringGrid1.ClientToScreen(Point(500,400));
-      ShowMessage('Искомое найдено и выделено!');
-      Abort; end;
-      end;
-   ShowMessage('Не найдено');
-end;}
 procedure findmin(i:integer;L:list);//find min()
 var n:integer;min:string;
 begin
@@ -702,9 +681,7 @@ var p,q:list;j:integer;
     p:=LIN;
     for j:=1 to param do LIN:=LIN^.next;
     LOUT:=LIN^.next;
-    new(q);
-    q^.manufacturer:='empty';
-    q^.next:=nil;
+    listinit(q);
     LIN^.next:=q;
     LIN:=p;
     end;
@@ -716,16 +693,19 @@ for i:=1 to listlength(LIN) do
  begin
   insert(0,p^.manufacturer,FloatToStr(p^.diagonal),p^.processor,FloatToStr(p^.frequency),IntToStr(p^.ram),IntToStr(p^.hddssd),FloatToStr(p^.weight),IntToStr(p^.cost),LIN);
   p:=p^.next;
- end;                      // y=StrToFloat(FloatToStrF(x,ffFixed,8,0));
+ end;
 len:=listlength(LIN)/2;
-//ShowMessage(FloatToStr(len));
 y:=trunc(len);
-//ShowMessage(IntToStr(y)); //(listlength(LIN)/2);
 for i:=1 to y do
  begin
- del(i+y-1,LIN);
+ del(y,LIN);
  end;
-ShowMessage('s');
+updategrid(LIN);
+end;
+function currentlist():integer;
+begin
+  if AnsiPos('1',Form1.menulist.Caption)=30 then currentlist:=1
+  else  currentlist:=2;
 end;
 
 ///\
@@ -771,8 +751,7 @@ begin
 end;
 procedure TForm1.menulist1Click(Sender: TObject);// list 1
 begin
-  menulist.Caption:='Текущий список #1';
-  updategrid(L);
+  menulist.Caption:='Текущий список #1';updategrid(L);
 end;
 procedure TForm1.menulist2Click(Sender: TObject);// list 2
 begin
@@ -780,9 +759,13 @@ begin
 end;
 procedure TForm1.menulistconnectClick(Sender: TObject);
 begin
-  connector(L,L2);
-  updategrid(L);
-end;
+  if (check(L)=0) or (check(L2)=0) then begin ShowMessage('Нечего объединять');Abort;end
+  else begin
+   if currentlist()=1 then begin  connector(L,L2);updategrid(L);end
+                        else begin connector(L2,L);updategrid(L2);end;
+  end;
+  end;
+
 procedure TForm1.menulistlen1Click(Sender: TObject);// len  1
 begin
   ShowMessage('Длина списка 1 - '+IntToStr(listlength(L)));
@@ -791,15 +774,11 @@ procedure TForm1.menulistlen2Click(Sender: TObject);// len 2
 begin
   ShowMessage('Длина списка 2 - '+IntToStr(listlength(L2)));
 end;
-procedure TForm1.menusortClick(Sender: TObject);
-begin
-end;
-procedure TForm1.popaddClick(Sender: TObject);// add
+procedure TForm1.popaddClick(Sender: TObject);// add  /
 begin
   Form2.rb1.Visible:=True;Form2.rb2.Visible:=True;
  Form2.title.Caption:='Заполните данные для добавления';
  Form2.ShowModal;
- //Form2.findb.Visible:=True;
  p1:=Form2.Edit1.Caption;p2:=Form2.Edit2.Caption;
  p3:=Form2.Edit3.Caption;p4:=Form2.Edit4.Caption;
  p5:=Form2.Edit5.Caption;p6:=Form2.Edit6.Caption;
@@ -807,30 +786,41 @@ begin
  if Form2.addb.Tag=Form2.Tag then Abort;
  if Form2.rb1.Checked=True then
   begin
-    insert(StringGrid1.Row,p1,p2,p3,p4,p5,p6,p7,p8,L);
+     if currentlist()=1 then insert(StringGrid1.Row,p1,p2,p3,p4,p5,p6,p7,p8,L)
+                  else insert(StringGrid1.Row,p1,p2,p3,p4,p5,p6,p7,p8,L2);
     updategrid(L);
   fixer();
   end
  else
   begin
+  if currentlist()=1 then begin  if StringGrid1.Row=1 then insert(0,p1,p2,p3,p4,p5,p6,p7,p8,L)
+   else insert(StringGrid1.Row-1,p1,p2,p3,p4,p5,p6,p7,p8,L); end
+                  else begin  if StringGrid1.Row=1 then insert(0,p1,p2,p3,p4,p5,p6,p7,p8,L2)
+   else insert(StringGrid1.Row-1,p1,p2,p3,p4,p5,p6,p7,p8,L2); end;
+
    if StringGrid1.Row=1 then insert(0,p1,p2,p3,p4,p5,p6,p7,p8,L)
    else insert(StringGrid1.Row-1,p1,p2,p3,p4,p5,p6,p7,p8,L);
-   updategrid(L);
+
    fixer();
   end;
+    if currentlist()=1 then updategrid(L)
+                  else updategrid(L2);
 end;
 procedure TForm1.popdelsecClick(Sender: TObject);//del sel
 var j:integer;
 begin
    j:=StringGrid1.Row;
+    if currentlist()=1 then del(StringGrid1.Row-1,L)
+                  else del(StringGrid1.Row-1,L2);
    del(StringGrid1.Row-1,L);
    StringGrid1.Row:=j;
    for j:=1 to Form1.StringGrid1.ColCount-2 do
    begin
     Form1.StringGrid1.Rows[Form1.StringGrid1.RowCount-2][j-1]:='';
    end;
-   updategrid(L);
-end;
+   if currentlist()=1 then updategrid(L)
+                  else updategrid(L2);
+end;////////
 procedure TForm1.popeditClick(Sender: TObject);// edit
 var i:integer;
 begin
@@ -842,69 +832,69 @@ begin
  Form2.title.Caption:='Заполните данные для изменения';
  Form2.addb.Caption:='Изменить';
  Form2.ShowModal;
- edit(StringGrid1.Row,Form2.Edit1.Caption,Form2.Edit2.Caption,Form2.Edit3.Caption,Form2.Edit4.Caption,Form2.Edit5.Caption,Form2.Edit6.Caption,Form2.Edit7.Caption,Form2.Edit8.Caption,L);
- updategrid(L);
+  if currentlist()=1 then begin edit(StringGrid1.Row,Form2.Edit1.Caption,Form2.Edit2.Caption,Form2.Edit3.Caption,Form2.Edit4.Caption,Form2.Edit5.Caption,Form2.Edit6.Caption,Form2.Edit7.Caption,Form2.Edit8.Caption,L);updategrid(L);end
+                  else begin edit(StringGrid1.Row,Form2.Edit1.Caption,Form2.Edit2.Caption,Form2.Edit3.Caption,Form2.Edit4.Caption,Form2.Edit5.Caption,Form2.Edit6.Caption,Form2.Edit7.Caption,Form2.Edit8.Caption,L2);updategrid(L2);end;
  CleanAllEdits(Form2);
-end;
+end;///////
 procedure TForm1.popfindmaxClick(Sender: TObject);//find max sel col
 begin
-  findmax(Form1.StringGrid1.SelectedColumn.Index,L);
-end;
+   if currentlist()=1 then begin findmax(Form1.StringGrid1.SelectedColumn.Index,L);updategrid(L);end
+                  else begin findmax(Form1.StringGrid1.SelectedColumn.Index,L2);updategrid(L2);end;
+end;//////
 procedure TForm1.popfindminClick(Sender: TObject);//find min sel col
 begin
-   findmin(Form1.StringGrid1.SelectedColumn.Index,L);
-end;
-
+  if currentlist()=1 then begin findmin(Form1.StringGrid1.SelectedColumn.Index,L);updategrid(L);end
+                  else begin findmin(Form1.StringGrid1.SelectedColumn.Index,L2);updategrid(L2);end;
+end;/////
 procedure TForm1.popreverseClick(Sender: TObject);
 begin
-  reverse(L);
-  updategrid(L);
-end;
-
+ if currentlist()=1 then begin reverse(L);updategrid(L);end
+                  else begin reverse(L2);updategrid(L2);end;
+end;////
 procedure TForm1.separatebyselClick(Sender: TObject);
 begin
-   separatorbyparam(Form1.StringGrid1.Row-1,L,L2);
-   updategrid(L);
-end;
+   if currentlist()=1 then begin separatorbyparam(Form1.StringGrid1.Row-1,L,L2);updategrid(L);end
+                     else begin separatorbyparam(Form1.StringGrid1.Row-1,L2,L);updategrid(L2);end;
+end;///
 procedure TForm1.sortbycClick(Sender: TObject);//sort by cost
 begin
-  sortbyparam(7,L);
-  updategrid(L);
-end;
+ if currentlist()=1 then begin sortbyparam(7,L);updategrid(L);end
+                  else begin sortbyparam(7,L2);updategrid(L2);end;
+end;//
 procedure TForm1.sortbydClick(Sender: TObject);//sort by diagonal
 begin
-  sortbyparam(1,L);
-  updategrid(L);
+ if currentlist()=1 then begin sortbyparam(1,L);updategrid(L);end
+                  else begin sortbyparam(1,L2);updategrid(L2);end;
 end;
 procedure TForm1.sortbyfClick(Sender: TObject);//sort by frequency
 begin
-  sortbyparam(3,L);
-  updategrid(L);
+ if currentlist()=1 then begin sortbyparam(3,L);updategrid(L);end
+                  else begin sortbyparam(3,L2);updategrid(L2);end;
 end;
 procedure TForm1.sortbyhClick(Sender: TObject);//sort by hddssd
 begin
-  sortbyparam(5,L);
-  updategrid(L);
+ if currentlist()=1 then begin sortbyparam(5,L);updategrid(L);end
+                  else begin sortbyparam(5,L2);updategrid(L2);end;
 end;
 procedure TForm1.sortbymClick(Sender: TObject);//sort by manufacturer
 begin
-  sortbyparam(0,L);
-  updategrid(L);
+ if currentlist()=1 then begin sortbyparam(0,L);updategrid(L);end
+                  else begin sortbyparam(0,L2);updategrid(L2);end;
 end;
 procedure TForm1.sortbypClick(Sender: TObject);//sort by processor
 begin
-  sortbyparam(2,L);
-  updategrid(L);
+    if currentlist()=1 then begin sortbyparam(2,L);updategrid(L);end
+                     else begin  sortbyparam(2,L2);updategrid(L2);end;
 end;
 procedure TForm1.sortbyrClick(Sender: TObject);//sort by RAM
 begin
-  sortbyparam(4,L);
-  updategrid(L);
+   if currentlist()=1 then begin sortbyparam(4,L);updategrid(L);end
+                     else begin sortbyparam(4,L2);updategrid(L2);end;
 end;
 procedure TForm1.sortbywClick(Sender: TObject);//sort by weight
 begin
-    sortbyparam(6,L);
-  updategrid(L);
+  if currentlist()=1 then begin  sortbyparam(6,L);updategrid(L);end
+                     else begin sortbyparam(6,L2);updategrid(L2);end;
 end;
 procedure TForm1.StringGrid1MouseDown(Sender: TObject; Button: TMouseButton;// auto focus
   Shift: TShiftState; X, Y: Integer);
@@ -915,45 +905,15 @@ begin
   StringGrid1.Row:=ARow;
   StringGrid1.SelectedColor:=clBlue;
 end;
-{procedure TForm1.Button3Click(Sender: TObject);//find  (###)
-begin
-  FindHideAllEdits(Form2);
-  FindHideAllLabels(Form2);
-  Form2.title.Visible:=True;
-  Form2.Edit9.Visible:=True;
-  Form2.elems.Visible:=True;
-  Form2.addb.Visible:=False;Form2.delb.Visible:=False;Form2.title.Caption:='Введите один из параметров для поиска';Form2.ShowModal;Form2.delb.Visible:=True;Form2.addb.Visible:=True;
-  Form2.Edit9.Visible:=False;
-  ShowAllLabels(Form2);
-  ShowAllEdits(Form2);
-  Form2.elems.Visible:=False;
-  Form2.Edit9.Visible:=False;
-  if Form2.findb.Tag=Form2.Tag then Abort;
-  finder(Form2.elems.ItemIndex,Form2.Edit9.Caption);
-  CleanAllEdits(Form2);
-end;}
-{procedure TForm1.Button4Click(Sender: TObject);  //del  (###)
-begin
- Form2.checkbox.Visible:=True;FindHideAllEdits(Form2);FindHideAllLabels(Form2);Form2.title.Visible:=True;Form2.Edit9.Visible:=True;Form2.elems.Visible:=True;Form2.addb.Visible:=False;Form2.findb.Visible:=False;Form2.title.Caption:='Введите один из параметров для удаления';
-  Form2.ShowModal;
-  Form2.findb.Visible:=True;Form2.addb.Visible:=True;Form2.Edit9.Visible:=False;
-  ShowAllLabels(Form2);
-  ShowAllEdits(Form2);
-  Form2.elems.Visible:=False;Form2.Edit9.Visible:=False;Form2.checkbox.Visible:=False;
-  delete(Form2.elems.ItemIndex,Form2.Edit9.Caption,L);cleargrid();
-  updategrid(L);
-end;}
 procedure TForm1.Button5Click(Sender: TObject);//printer
 begin
- printer(L);
+   if currentlist()=1 then printer(L)
+                     else printer(L2);
 end;
 procedure TForm1.Button1Click(Sender: TObject);
 begin
-if AnsiPos('1',menulist.Caption)=30   then begin
-  searcher(StringGrid1.SelectedColumn.Index,Edit1.Text,L)
-end
-else
-  searcher(StringGrid1.SelectedColumn.Index,Edit1.Text,L2);
+if currentlist()=1 then searcher(StringGrid1.SelectedColumn.Index,Edit1.Text,L)
+                   else searcher(StringGrid1.SelectedColumn.Index,Edit1.Text,L2);
 end;
 procedure TForm1.checklist1Click(Sender: TObject);// check 1
 begin
