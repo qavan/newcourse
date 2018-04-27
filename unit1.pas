@@ -37,6 +37,9 @@ type
     MenuItem3: TMenuItem;
     checklist1: TMenuItem;
     checklist2: TMenuItem;
+    popreverse: TMenuItem;
+    menulistconnect: TMenuItem;
+    separatebysel: TMenuItem;
     sortbyp: TMenuItem;
     sortbym: TMenuItem;
     sortbyc: TMenuItem;
@@ -71,6 +74,7 @@ type
     procedure MenuItem3Click(Sender: TObject);
     procedure menulist1Click(Sender: TObject);
     procedure menulist2Click(Sender: TObject);
+    procedure menulistconnectClick(Sender: TObject);
     procedure menulistlen1Click(Sender: TObject);
     procedure menulistlen2Click(Sender: TObject);
     procedure menusortClick(Sender: TObject);
@@ -79,6 +83,8 @@ type
     procedure popeditClick(Sender: TObject);
     procedure popfindmaxClick(Sender: TObject);
     procedure popfindminClick(Sender: TObject);
+    procedure popreverseClick(Sender: TObject);
+    procedure separatebyselClick(Sender: TObject);
     procedure sortbycClick(Sender: TObject);
     procedure sortbydClick(Sender: TObject);
     procedure sortbyfClick(Sender: TObject);
@@ -294,17 +300,23 @@ else if n=7 then begin
       if p^.cost=StrToInt(value) then begin del(i,L);break; end;p:=p^.next;end;end
 end;
 procedure updategrid(L:list);//updategrid()
-var i:integer;
+var i,j:integer;
 begin
  if check(L)=0 then
   begin
+   //for i:=1 to Form1.StringGrid1.RowCount;
    for i:=1 to Form1.StringGrid1.RowCount-1 do
     begin
       Form1.StringGrid1.Rows[i][0]:='' ;Form1.StringGrid1.Rows[i][1]:='' ;Form1.StringGrid1.Rows[i][2]:='' ;Form1.StringGrid1.Rows[i][3]:='' ;Form1.StringGrid1.Rows[i][4]:='' ;Form1.StringGrid1.Rows[i][5]:='' ;Form1.StringGrid1.Rows[i][6]:='' ;Form1.StringGrid1.Rows[i][7]:='' ;
     end;
+
   end
 else
 begin
+for j:=1 to Form1.StringGrid1.RowCount-1 do
+   begin
+     Form1.StringGrid1.Rows[j][0]:='' ;Form1.StringGrid1.Rows[j][1]:='' ;Form1.StringGrid1.Rows[j][2]:='' ;Form1.StringGrid1.Rows[j][3]:='' ;Form1.StringGrid1.Rows[j][4]:='' ;Form1.StringGrid1.Rows[j][5]:='' ;Form1.StringGrid1.Rows[j][6]:='' ;Form1.StringGrid1.Rows[j][7]:='' ;
+   end;
  for i:=1 to listlength(L) do
   begin
      Form1.StringGrid1.Rows[i][0]:=L^.manufacturer ;
@@ -508,7 +520,7 @@ else if i=6 then
 end;
 ShowMessage('Максимальный - '+max);
 end;
-procedure searcher(i:integer;s:string;L:list);
+procedure searcher(i:integer;s:string;L:list);// searcher ()
 var r:string;j:integer;
 begin
  if (i=0) or (i=2) then begin
@@ -670,12 +682,52 @@ begin
                  if p^.cost>p^.next^.cost then begin
                     swipe(p,q1,q2);
                    end else
-                 p:=p^.next;  end;p:=L^.next;
+                 p:=p^.next;end;p:=L^.next;
                end;
       end;
     end;
   del(0,L);
 end;
+procedure connector(var LINOUT,LIN:list);// conector ()
+var i:integer;p:list;
+  begin
+  p:=LINOUT;
+   for i:=1 to listlength(LINOUT)-1 do p:=p^.next;
+    p^.next:=LIN;
+    LIN:=nil;
+  end;
+procedure separatorbyparam(param:integer;var LIN,LOUT:list);//separator by param ()
+var p,q:list;j:integer;
+    begin
+    p:=LIN;
+    for j:=1 to param do LIN:=LIN^.next;
+    LOUT:=LIN^.next;
+    new(q);
+    q^.manufacturer:='empty';
+    q^.next:=nil;
+    LIN^.next:=q;
+    LIN:=p;
+    end;
+procedure reverse(var LIN:list);
+var p:list;i,y:integer;len:real;
+begin
+p:=L;
+for i:=1 to listlength(LIN) do
+ begin
+  insert(0,p^.manufacturer,FloatToStr(p^.diagonal),p^.processor,FloatToStr(p^.frequency),IntToStr(p^.ram),IntToStr(p^.hddssd),FloatToStr(p^.weight),IntToStr(p^.cost),LIN);
+  p:=p^.next;
+ end;                      // y=StrToFloat(FloatToStrF(x,ffFixed,8,0));
+len:=listlength(LIN)/2;
+//ShowMessage(FloatToStr(len));
+y:=trunc(len);
+//ShowMessage(IntToStr(y)); //(listlength(LIN)/2);
+for i:=1 to y do
+ begin
+ del(i+y-1,LIN);
+ end;
+ShowMessage('s');
+end;
+
 ///\
 //||| Здесь разрыв, Сэр.
 ////
@@ -725,6 +777,11 @@ end;
 procedure TForm1.menulist2Click(Sender: TObject);// list 2
 begin
   menulist.Caption:='Текущий список #2'; updategrid(L2);
+end;
+procedure TForm1.menulistconnectClick(Sender: TObject);
+begin
+  connector(L,L2);
+  updategrid(L);
 end;
 procedure TForm1.menulistlen1Click(Sender: TObject);// len  1
 begin
@@ -796,6 +853,18 @@ end;
 procedure TForm1.popfindminClick(Sender: TObject);//find min sel col
 begin
    findmin(Form1.StringGrid1.SelectedColumn.Index,L);
+end;
+
+procedure TForm1.popreverseClick(Sender: TObject);
+begin
+  reverse(L);
+  updategrid(L);
+end;
+
+procedure TForm1.separatebyselClick(Sender: TObject);
+begin
+   separatorbyparam(Form1.StringGrid1.Row-1,L,L2);
+   updategrid(L);
 end;
 procedure TForm1.sortbycClick(Sender: TObject);//sort by cost
 begin
