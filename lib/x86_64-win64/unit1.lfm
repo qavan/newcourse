@@ -95,7 +95,7 @@ object Form1: TForm1
   object Button1: TButton
     Left = 512
     Height = 25
-    Top = 422
+    Top = 423
     Width = 128
     Caption = 'Поиск'
     OnClick = Button1Click

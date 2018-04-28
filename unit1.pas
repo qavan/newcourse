@@ -168,6 +168,7 @@ function listlength(L:list):integer;
 procedure insert(n:Integer;a1,a2,a3,a4,a5,a6,a7,a8:string;var L:list);
 var p,q:list;i:integer;
 begin
+ if check(L)=0 then begin ShowMessage('Ошибка из-за (не)существования списка');Abort; end;
   if n=0 then begin
        new(p);
        p^.manufacturer:=a1;
@@ -239,9 +240,10 @@ procedure eraser(var L:list);//eraser()
     dispose(L);
     L:=nil;
   end;
-procedure del(i:integer;var L:list);//del()
+procedure del(i:integer;var LIN:list);//del()
 var p:list;j:integer;
 begin
+if check(LIN)=0 then begin ShowMessage('Ошибка из-за (не)существования списка');Abort; end;
 p:=L;
 //ShowMessage(p^.manufacturer);
 for j:=0 to i-1 do begin p:=p^.next;end;
@@ -295,8 +297,12 @@ else if n=7 then begin
       if p^.cost=StrToInt(value) then begin del(i,L);break; end;p:=p^.next;end;end
 end;
 procedure updategrid(L:list);//updategrid()
-var i,j:integer;
+var i,j:integer;ltemp:list;
 begin
+cleargrid();
+//ltemp:=L;
+//if listlength(ltemp)=Form1.StringGrid1.RowCount then
+//Form1.StringGrid1.RowCount:=Form1.StringGrid1.RowCount+1;
  if check(L)=0 then
   begin
    for i:=1 to Form1.StringGrid1.RowCount-1 do
@@ -323,6 +329,7 @@ for j:=1 to Form1.StringGrid1.RowCount-1 do
      L:=L^.next;
   end;
  end;
+//Form1.StringGrid1.RowCount:=listlength(ltemp)+1;
 end;
 procedure FindHideAllEdits(F: TForm);//hide edits()
 var i: Integer;
@@ -352,10 +359,11 @@ begin
     if F.Components[i] is TLabel then
       TEdit(F.Components[i] as TLabel).Visible:=False;
 end;
-procedure edit(i:integer;a1,a2,a3,a4,a5,a6,a7,a8:string;var L:list);//edit
+procedure edit(i:integer;a1,a2,a3,a4,a5,a6,a7,a8:string;var LIN:list);//edit
 var j:integer;p:list;
 begin
- p:=L;
+ if check(LIN)=0 then begin ShowMessage('Ошибка из-за (не)существования списка');Abort; end;
+ p:=LIN;
  for j:=1 to i-1 do p:=p^.next;
   p^.manufacturer:=a1;
   p^.diagonal:=StrToFloat(a2);
@@ -499,60 +507,61 @@ else if i=6 then
 end;
 ShowMessage('Максимальный - '+max);
 end;
-procedure searcher(i:integer;s:string;L:list);// searcher ()
+procedure searcher(i:integer;s:string;LIN:list);// searcher ()
 var r:string;j:integer;
 begin
- if (i=0) or (i=2) then begin
+if check(LIN)=0 then begin ShowMessage('Ошибка из-за (не)существования списка');Abort; end;
+if (i=0) or (i=2) then begin
   if i=0 then begin
    for j:=1 to listlength(L) do begin
-   if L^.manufacturer=s then r:=r+IntTostr(j)+' '+L^.manufacturer+' '+ FloatToStr(L^.diagonal)+' '+ L^.processor+' '+ FloatToStr(L^.frequency)+' '+ IntToStr(L^.ram)+' '+ IntToStr(L^.hddssd)+' '+ FloatToStr(L^.weight)+' '+ IntToStr(L^.cost)+#13;
-   L:=L^.next;
+   if LIN^.manufacturer=s then r:=r+IntTostr(j)+' '+LIN^.manufacturer+' '+ FloatToStr(LIN^.diagonal)+' '+ LIN^.processor+' '+ FloatToStr(LIN^.frequency)+' '+ IntToStr(LIN^.ram)+' '+ IntToStr(LIN^.hddssd)+' '+ FloatToStr(LIN^.weight)+' '+ IntToStr(LIN^.cost)+#13;
+   LIN:=LIN^.next;
    end;
    end
   else begin
      for j:=1 to listlength(L) do begin
-     if L^.processor=s then r:=r+IntTostr(j)+' '+L^.manufacturer+' '+ FloatToStr(L^.diagonal)+' '+ L^.processor+' '+ FloatToStr(L^.frequency)+' '+ IntToStr(L^.ram)+' '+ IntToStr(L^.hddssd)+' '+ FloatToStr(L^.weight)+' '+ IntToStr(L^.cost)+#13;
-   L:=L^.next;
+     if LIN^.processor=s then r:=r+IntTostr(j)+' '+LIN^.manufacturer+' '+ FloatToStr(LIN^.diagonal)+' '+ LIN^.processor+' '+ FloatToStr(LIN^.frequency)+' '+ IntToStr(LIN^.ram)+' '+ IntToStr(LIN^.hddssd)+' '+ FloatToStr(LIN^.weight)+' '+ IntToStr(LIN^.cost)+#13;
+   LIN:=LIN^.next;
    end;
    end;
   end////------
   else if  (i=4) or (i=5) or (i=7) then begin
      if i=4 then begin
    for j:=1 to listlength(L) do begin
-   if IntToStr(L^.ram)=s then r:=r+IntTostr(j)+' '+L^.manufacturer+' '+ FloatToStr(L^.diagonal)+' '+ L^.processor+' '+ FloatToStr(L^.frequency)+' '+ IntToStr(L^.ram)+' '+ IntToStr(L^.hddssd)+' '+ FloatToStr(L^.weight)+' '+ IntToStr(L^.cost)+#13;
-   L:=L^.next;
+   if IntToStr(LIN^.ram)=s then r:=r+IntTostr(j)+' '+LIN^.manufacturer+' '+ FloatToStr(LIN^.diagonal)+' '+ LIN^.processor+' '+ FloatToStr(LIN^.frequency)+' '+ IntToStr(LIN^.ram)+' '+ IntToStr(LIN^.hddssd)+' '+ FloatToStr(LIN^.weight)+' '+ IntToStr(LIN^.cost)+#13;
+   LIN:=LIN^.next;
    end;
    end
   else  if i=5 then begin
    for j:=1 to listlength(L) do begin
-   if IntToStr(L^.hddssd)=s then r:=r+IntTostr(j)+' '+L^.manufacturer+' '+ FloatToStr(L^.diagonal)+' '+ L^.processor+' '+ FloatToStr(L^.frequency)+' '+ IntToStr(L^.ram)+' '+ IntToStr(L^.hddssd)+' '+ FloatToStr(L^.weight)+' '+ IntToStr(L^.cost)+#13;
-   L:=L^.next;
+   if IntToStr(LIN^.hddssd)=s then r:=r+IntTostr(j)+' '+LIN^.manufacturer+' '+ FloatToStr(LIN^.diagonal)+' '+ LIN^.processor+' '+ FloatToStr(LIN^.frequency)+' '+ IntToStr(LIN^.ram)+' '+ IntToStr(LIN^.hddssd)+' '+ FloatToStr(LIN^.weight)+' '+ IntToStr(LIN^.cost)+#13;
+   LIN:=LIN^.next;
    end;
    end
   else begin
      for j:=1 to listlength(L) do begin
-   if IntToStr(L^.cost)=s then r:=r+IntTostr(j)+' '+L^.manufacturer+' '+ FloatToStr(L^.diagonal)+' '+ L^.processor+' '+ FloatToStr(L^.frequency)+' '+ IntToStr(L^.ram)+' '+ IntToStr(L^.hddssd)+' '+ FloatToStr(L^.weight)+' '+ IntToStr(L^.cost)+#13;
-   L:=L^.next;
+   if IntToStr(LIN^.cost)=s then r:=r+IntTostr(j)+' '+LIN^.manufacturer+' '+ FloatToStr(LIN^.diagonal)+' '+ LIN^.processor+' '+ FloatToStr(LIN^.frequency)+' '+ IntToStr(LIN^.ram)+' '+ IntToStr(LIN^.hddssd)+' '+ FloatToStr(LIN^.weight)+' '+ IntToStr(LIN^.cost)+#13;
+   LIN:=LIN^.next;
    end;
    end;
   end//-------
   else if  (i=1) or (i=3) or (i=6) then begin
     if i=1 then begin
    for j:=1 to listlength(L) do begin
-   if FloatToStr(L^.diagonal)=s then r:=r+IntTostr(j)+' '+L^.manufacturer+' '+ FloatToStr(L^.diagonal)+' '+ L^.processor+' '+ FloatToStr(L^.frequency)+' '+ IntToStr(L^.ram)+' '+ IntToStr(L^.hddssd)+' '+ FloatToStr(L^.weight)+' '+ IntToStr(L^.cost)+#13;
-   L:=L^.next;
+   if FloatToStr(LIN^.diagonal)=s then r:=r+IntTostr(j)+' '+LIN^.manufacturer+' '+ FloatToStr(LIN^.diagonal)+' '+ LIN^.processor+' '+ FloatToStr(LIN^.frequency)+' '+ IntToStr(LIN^.ram)+' '+ IntToStr(LIN^.hddssd)+' '+ FloatToStr(LIN^.weight)+' '+ IntToStr(LIN^.cost)+#13;
+   LIN:=LIN^.next;
    end;
    end
   else  if i=3 then begin
    for j:=1 to listlength(L) do begin
-   if FloatToStr(L^.frequency)=s then r:=r+IntTostr(j)+' '+L^.manufacturer+' '+ FloatToStr(L^.diagonal)+' '+ L^.processor+' '+ FloatToStr(L^.frequency)+' '+ IntToStr(L^.ram)+' '+ IntToStr(L^.hddssd)+' '+ FloatToStr(L^.weight)+' '+ IntToStr(L^.cost)+#13;
-   L:=L^.next;
+   if FloatToStr(LIN^.frequency)=s then r:=r+IntTostr(j)+' '+LIN^.manufacturer+' '+ FloatToStr(LIN^.diagonal)+' '+ LIN^.processor+' '+ FloatToStr(LIN^.frequency)+' '+ IntToStr(LIN^.ram)+' '+ IntToStr(LIN^.hddssd)+' '+ FloatToStr(LIN^.weight)+' '+ IntToStr(LIN^.cost)+#13;
+   LIN:=LIN^.next;
    end;
    end
   else begin
      for j:=1 to listlength(L) do begin
-   if FloatToStr(L^.weight)=s then r:=r+IntTostr(j)+' '+L^.manufacturer+' '+ FloatToStr(L^.diagonal)+' '+ L^.processor+' '+ FloatToStr(L^.frequency)+' '+ IntToStr(L^.ram)+' '+ IntToStr(L^.hddssd)+' '+ FloatToStr(L^.weight)+' '+ IntToStr(L^.cost)+#13;
-   L:=L^.next;
+   if FloatToStr(LIN^.weight)=s then r:=r+IntTostr(j)+' '+LIN^.manufacturer+' '+ FloatToStr(LIN^.diagonal)+' '+ LIN^.processor+' '+ FloatToStr(LIN^.frequency)+' '+ IntToStr(LIN^.ram)+' '+ IntToStr(LIN^.hddssd)+' '+ FloatToStr(LIN^.weight)+' '+ IntToStr(LIN^.cost)+#13;
+   LIN:=LIN^.next;
    end;
  end;
  end;
@@ -572,34 +581,35 @@ begin
  p2^.next:=p1;
  p1^.prev:=p2;
 end;
-procedure sortbyparam(i:integer;var L:list); //sort ()
+procedure sortbyparam(i:integer;var LIN:list); //sort ()
 var p,q1,q2:list;j:integer;
 begin
- insert(0,'0','0','0','0','0','0','0','0',L);
-  p:=L^.next;
+ if check(LIN)=0 then begin ShowMessage('Ошибка из-за (не)существования списка');Abort; end;
+ insert(0,'0','0','0','0','0','0','0','0',LIN);
+  p:=LIN^.next;
   if (i=0) or (i=2) then
    begin
     if (i=0) then
      begin
-       for j:=1 to listlength(L) do begin
+       for j:=1 to listlength(LIN) do begin
        while p^.next^.manufacturer<>'empty' do begin
          if p^.manufacturer>p^.next^.manufacturer then begin
                  swipe(p,q1,q2);
                  end else
                 p:=p^.next;
-                 end;p:=L^.next;
+                 end;p:=LIN^.next;
        end;
       end
     else
       begin
-               for j:=1 to listlength(L) do begin  while p^.next^.manufacturer<>'empty' do begin
+               for j:=1 to listlength(LIN) do begin  while p^.next^.manufacturer<>'empty' do begin
                 while p^.next^.manufacturer<>'empty' do begin
                  if p^.processor>p^.next^.processor then begin
                     swipe(p,q1,q2);
                    end else
                  p:=p^.next; end;
                 end;
-               p:=L^.next;
+               p:=LIN^.next;
                end;
        end;
       end
@@ -607,29 +617,29 @@ begin
    begin
     if (i=1) then
       begin
-           for j:=1 to listlength(L) do begin while p^.next^.manufacturer<>'empty' do begin
+           for j:=1 to listlength(LIN) do begin while p^.next^.manufacturer<>'empty' do begin
                  if p^.diagonal>p^.next^.diagonal then begin
                     swipe(p,q1,q2);
                    end else
-                 p:=p^.next;  end;p:=L^.next;
+                 p:=p^.next;  end;p:=LIN^.next;
                end;
        end
     else if (i=3) then
       begin
-           for j:=1 to listlength(L) do begin  while p^.next^.manufacturer<>'empty' do begin
+           for j:=1 to listlength(LIN) do begin  while p^.next^.manufacturer<>'empty' do begin
                  if p^.frequency>p^.next^.frequency then begin
                    swipe(p,q1,q2);;
                    end else
-                 p:=p^.next;  end;p:=L^.next;
+                 p:=p^.next;  end;p:=LIN^.next;
                end;
       end
     else
       begin
-           for j:=1 to listlength(L) do begin  while p^.next^.manufacturer<>'empty' do begin
+           for j:=1 to listlength(LIN) do begin  while p^.next^.manufacturer<>'empty' do begin
                  if p^.weight>p^.next^.weight then begin
                     swipe(p,q1,q2);;
                    end else
-                 p:=p^.next;      end;p:=L^.next;
+                 p:=p^.next;      end;p:=LIN^.next;
                end;
       end;
    end
@@ -637,31 +647,31 @@ begin
     begin
      if (i=4) then
        begin
-             for j:=1 to listlength(L) do begin  while p^.next^.manufacturer<>'empty' do begin
+             for j:=1 to listlength(LIN) do begin  while p^.next^.manufacturer<>'empty' do begin
                  if p^.ram>p^.next^.ram then begin
                     swipe(p,q1,q2);
                    end else
-                 p:=p^.next;  end;p:=L^.next;
+                 p:=p^.next;  end;p:=LIN^.next;
                end;
        end
      else if (i=5) then
        begin
-             for j:=1 to listlength(L) do begin
+             for j:=1 to listlength(LIN) do begin
               while p^.next^.manufacturer<>'empty' do begin
                  if p^.hddssd>p^.next^.hddssd then begin
                     swipe(p,q1,q2);
                    end else
                  p:=p^.next;
-              end; p:=L^.next;
+              end; p:=LIN^.next;
                end;
        end
      else
       begin
-          for j:=1 to listlength(L) do begin  while p^.next^.manufacturer<>'empty' do begin
+          for j:=1 to listlength(LIN) do begin  while p^.next^.manufacturer<>'empty' do begin
                  if p^.cost>p^.next^.cost then begin
                     swipe(p,q1,q2);
                    end else
-                 p:=p^.next;end;p:=L^.next;
+                 p:=p^.next;end;p:=LIN^.next;
                end;
       end;
     end;
@@ -678,6 +688,7 @@ var i:integer;p:list;
 procedure separatorbyparam(param:integer;var LIN,LOUT:list);//separator by param ()
 var p,q:list;j:integer;
     begin
+    if check(LIN)=0 then begin ShowMessage('Ошибка из-за (не)существования списка');Abort; end;
     p:=LIN;
     for j:=1 to param do LIN:=LIN^.next;
     LOUT:=LIN^.next;
@@ -688,7 +699,8 @@ var p,q:list;j:integer;
 procedure reverse(var LIN:list);
 var p:list;i,y:integer;len:real;
 begin
-p:=L;
+  if check(LIN)=0 then begin ShowMessage('Ошибка из-за (не)существования списка');Abort; end;
+p:=LIN;
 for i:=1 to listlength(LIN) do
  begin
   insert(0,p^.manufacturer,FloatToStr(p^.diagonal),p^.processor,FloatToStr(p^.frequency),IntToStr(p^.ram),IntToStr(p^.hddssd),FloatToStr(p^.weight),IntToStr(p^.cost),LIN);
@@ -737,6 +749,7 @@ begin
        t.Clear;
        fixer();
    end;
+   //Form1.StringGrid1.RowCount:=Form1.StringGrid1.RowCount-1 ;
    updategrid(L);
 end;
 procedure TForm1.MenuItem2Click(Sender: TObject);
@@ -776,6 +789,7 @@ begin
 end;
 procedure TForm1.popaddClick(Sender: TObject);// add  /
 begin
+
   Form2.rb1.Visible:=True;Form2.rb2.Visible:=True;
  Form2.title.Caption:='Заполните данные для добавления';
  Form2.ShowModal;
@@ -793,37 +807,42 @@ begin
   end
  else
   begin
-  if currentlist()=1 then begin  if StringGrid1.Row=1 then insert(0,p1,p2,p3,p4,p5,p6,p7,p8,L)
-   else insert(StringGrid1.Row-1,p1,p2,p3,p4,p5,p6,p7,p8,L); end
-                  else begin  if StringGrid1.Row=1 then insert(0,p1,p2,p3,p4,p5,p6,p7,p8,L2)
-   else insert(StringGrid1.Row-1,p1,p2,p3,p4,p5,p6,p7,p8,L2); end;
-
-   if StringGrid1.Row=1 then insert(0,p1,p2,p3,p4,p5,p6,p7,p8,L)
+  if currentlist()=1 then begin  if StringGrid1.Row=1 then
+        insert(0,p1,p2,p3,p4,p5,p6,p7,p8,L)
    else insert(StringGrid1.Row-1,p1,p2,p3,p4,p5,p6,p7,p8,L);
+  end
+                  else begin  if
+          StringGrid1.Row=1 then insert(0,p1,p2,p3,p4,p5,p6,p7,p8,L2)
+                             else insert(StringGrid1.Row-1,p1,p2,p3,p4,p5,p6,p7,p8,L2); end;
 
-   fixer();
-  end;
+  // if StringGrid1.Row=1 then insert(0,p1,p2,p3,p4,p5,p6,p7,p8,L)
+  //                       else insert(StringGrid1.Row-1,p1,p2,p3,p4,p5,p6,p7,p8,L);
+
+
+  end;fixer();
     if currentlist()=1 then updategrid(L)
                   else updategrid(L2);
 end;
 procedure TForm1.popdelsecClick(Sender: TObject);//del sel
 var j:integer;
 begin
+ if StringGrid1.Row+1=StringGrid1.RowCount then begin ShowMessage('Некорректный выбор');Abort; end;
    j:=StringGrid1.Row;
     if currentlist()=1 then del(StringGrid1.Row-1,L)
                   else del(StringGrid1.Row-1,L2);
-   del(StringGrid1.Row-1,L);
    StringGrid1.Row:=j;
    for j:=1 to Form1.StringGrid1.ColCount-2 do
    begin
     Form1.StringGrid1.Rows[Form1.StringGrid1.RowCount-2][j-1]:='';
    end;
+   Form1.StringGrid1.RowCount:=Form1.StringGrid1.RowCount-1;
    if currentlist()=1 then updategrid(L)
                   else updategrid(L2);
 end;////////
 procedure TForm1.popeditClick(Sender: TObject);// edit
 var i:integer;
 begin
+  if StringGrid1.Row+1=StringGrid1.RowCount then begin ShowMessage('Некорректный выбор');Abort; end;
  begin
   for i := 0 to Form2.ComponentCount - 1 do
     if Form2.Components[i] is TEdit then
@@ -853,7 +872,9 @@ begin
 end;////
 procedure TForm1.separatebyselClick(Sender: TObject);
 begin
-   if currentlist()=1 then begin separatorbyparam(Form1.StringGrid1.Row-1,L,L2);updategrid(L);end
+ if (StringGrid1.Row+1=StringGrid1.RowCount) or (StringGrid1.Row+2=StringGrid1.RowCount)
+then begin ShowMessage('Некорректный выбор');Abort; end;
+if currentlist()=1 then begin separatorbyparam(Form1.StringGrid1.Row-1,L,L2);updategrid(L);end
                      else begin separatorbyparam(Form1.StringGrid1.Row-1,L2,L);updategrid(L2);end;
 end;///
 procedure TForm1.sortbycClick(Sender: TObject);//sort by cost
