@@ -835,6 +835,7 @@ begin
    begin
     Form1.StringGrid1.Rows[Form1.StringGrid1.RowCount-2][j-1]:='';
    end;
+   Form1.StringGrid1.RowCount:=Form1.StringGrid1.RowCount-1;
    if currentlist()=1 then updategrid(L)
                   else updategrid(L2);
 end;////////
