@@ -10,7 +10,7 @@
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="22" Y="10"/>
-        <UsageCount Value="71"/>
+        <UsageCount Value="72"/>
       </Unit0>
       <Unit1>
         <Filename Value="unit1.pas"/>
@@ -20,10 +20,10 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="Unit1"/>
         <IsVisibleTab Value="True"/>
-        <TopLine Value="386"/>
-        <CursorPos X="13" Y="394"/>
-        <FoldState Value=" T3jO0E0O p0vA06 TM hmW11062a"/>
-        <UsageCount Value="71"/>
+        <TopLine Value="507"/>
+        <CursorPos X="8" Y="691"/>
+        <FoldState Value=" T3jO0E015 pidjU0E3 pj0jI065]9DjP0;]IkcmK07031 TM hmW11062{"/>
+        <UsageCount Value="72"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit1>
@@ -36,7 +36,7 @@
         <EditorIndex Value="1"/>
         <TopLine Value="62"/>
         <CursorPos X="6" Y="81"/>
-        <UsageCount Value="68"/>
+        <UsageCount Value="69"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit2>
@@ -45,7 +45,7 @@
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="29" Y="8"/>
-        <UsageCount Value="39"/>
+        <UsageCount Value="40"/>
       </Unit3>
       <Unit4>
         <Filename Value="C:\lazarus\fpc\3.0.4\source\rtl\objpas\sysutils\sysstrh.inc"/>
