@@ -296,6 +296,7 @@ end;
 procedure updategrid(L:list);//updategrid()
 var i,j:integer;ltemp:list;
 begin
+ltemp:=L;
 cleargrid();
 //ltemp:=L;
 //if listlength(ltemp)=Form1.StringGrid1.RowCount then
@@ -324,9 +325,10 @@ for j:=1 to Form1.StringGrid1.RowCount-1 do
      Form1.StringGrid1.Rows[i][6]:=FloatToStr(L^.weight);
      Form1.StringGrid1.Rows[i][7]:=IntToStr(L^.cost);
      L:=L^.next;
+     if Form1.StringGrid1.RowCount>listlength(ltemp)+2 then Form1.StringGrid1.RowCount:=listlength(ltemp)+2
+     else Form1.StringGrid1.RowCount:=listlength(ltemp)+1;
   end;
  end;
-//Form1.StringGrid1.RowCount:=listlength(ltemp)+1;
 end;
 procedure FindHideAllEdits(F: TForm);//hide edits()
 var i: Integer;

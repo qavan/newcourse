@@ -141,11 +141,11 @@ function check(var L:list):integer;
 begin
 if L<>nil then
  begin
-  check:=1;if gl=1 then ShowMessage('Список заполнен [listcheck]');
+  check:=1;if gl=1 then ShowMessage('Список не существует [listcheck]');
  end
 else
 begin
-   if gl=1 then ShowMessage('Список пуст [listcheck]');
+   if gl=1 then ShowMessage('Список не существует [listcheck]');
    check:=0;
 end;
 
@@ -153,8 +153,7 @@ end;
 function listlength(L:list):integer;
    begin
      listlength:=0;
-     //ShowMessage(IntToStr(L^.manufacturer.Length));
-     if check(L)=0 then begin ShowMessage('Список не существует [check][listlength]');Abort;end
+     if check(L)=0 then begin ShowMessage('Список не существует [listlength]');Abort;end
      else if L^.manufacturer='empty' then begin ShowMessage('Список пуст [listlength]');Abort;end
      else
      begin
@@ -245,7 +244,6 @@ var p:list;j:integer;
 begin
 if check(LIN)=0 then begin ShowMessage('Ошибка из-за (не)существования списка');Abort; end;
 p:=L;
-//ShowMessage(p^.manufacturer);
 for j:=0 to i-1 do begin p:=p^.next;end;
 //ShowMessage(p^.manufacturer+' '+j.ToString);
 if i=0 then
@@ -272,7 +270,6 @@ p:=L;
 if n=0 then begin
       for i:=0 to listlength(L)-1 do begin
       if p^.manufacturer=value then begin del(i,L);break end;
-      //ShowMessage(p^.manufacturer);
       p:=p^.next;end;end
 else if n=1 then begin
       for i:=0 to listlength(L)-1 do begin
@@ -299,6 +296,7 @@ end;
 procedure updategrid(L:list);//updategrid()
 var i,j:integer;ltemp:list;
 begin
+ltemp:=L;
 cleargrid();
 //ltemp:=L;
 //if listlength(ltemp)=Form1.StringGrid1.RowCount then
@@ -327,23 +325,24 @@ for j:=1 to Form1.StringGrid1.RowCount-1 do
      Form1.StringGrid1.Rows[i][6]:=FloatToStr(L^.weight);
      Form1.StringGrid1.Rows[i][7]:=IntToStr(L^.cost);
      L:=L^.next;
+     if Form1.StringGrid1.RowCount>listlength(ltemp)+2 then Form1.StringGrid1.RowCount:=listlength(ltemp)+2
+     else Form1.StringGrid1.RowCount:=listlength(ltemp);
   end;
  end;
-//Form1.StringGrid1.RowCount:=listlength(ltemp)+1;
 end;
 procedure FindHideAllEdits(F: TForm);//hide edits()
 var i: Integer;
 begin
-  for i := 0 to F.ComponentCount - 1 do       // пройтись по всей форме
-    if F.Components[i] is TEdit then          // найти на ней все эдиты
-      TEdit(F.Components[i] as TEdit).Visible:=False;  // найденный эдит очистить
+  for i := 0 to F.ComponentCount - 1 do
+    if F.Components[i] is TEdit then
+      TEdit(F.Components[i] as TEdit).Visible:=False;
 end;
 procedure ShowAllLabels(F: TForm);//show labels()
 var i: Integer;
 begin
-  for i := 0 to F.ComponentCount - 1 do       // пройтись по всей форме
-    if F.Components[i] is TLabel then          // найти на ней все эдиты
-      TEdit(F.Components[i] as TLabel).Visible:=True;  // найденный эдит очистить
+  for i := 0 to F.ComponentCount - 1 do
+    if F.Components[i] is TLabel then
+      TEdit(F.Components[i] as TLabel).Visible:=True;
 end;
 procedure ShowAllEdits(F: TForm);//show edits()
 var i: Integer;
@@ -726,9 +725,9 @@ end;
 procedure CleanAllEdits(F: TForm);//CLEAN ALL EDITS
 var i: Integer;
 begin
- for i := 0 to F.ComponentCount - 1 do       // пройтись по всей форме
-   if F.Components[i] is TEdit then          // найти на ней все эдиты
-     TEdit(F.Components[i] as TEdit).Caption:='0';  // найденный эдит очистить
+ for i := 0 to F.ComponentCount - 1 do
+   if F.Components[i] is TEdit then
+     TEdit(F.Components[i] as TEdit).Caption:='0';
 end;
 procedure TForm1.FormCreate(Sender: TObject);//FORM CREATE
 var
@@ -775,7 +774,7 @@ begin
   if (check(L)=0) or (check(L2)=0) then begin ShowMessage('Нечего объединять');Abort;end
   else begin
    if currentlist()=1 then begin  connector(L,L2);updategrid(L);end
-                        else begin connector(L2,L);updategrid(L2);end;
+     else begin connector(L2,L);updategrid(L2);end;
   end;
   end;
 
@@ -814,11 +813,6 @@ begin
                   else begin  if
           StringGrid1.Row=1 then insert(0,p1,p2,p3,p4,p5,p6,p7,p8,L2)
                              else insert(StringGrid1.Row-1,p1,p2,p3,p4,p5,p6,p7,p8,L2); end;
-
-  // if StringGrid1.Row=1 then insert(0,p1,p2,p3,p4,p5,p6,p7,p8,L)
-  //                       else insert(StringGrid1.Row-1,p1,p2,p3,p4,p5,p6,p7,p8,L);
-
-
   end;fixer();
     if currentlist()=1 then updategrid(L)
                   else updategrid(L2);
@@ -846,7 +840,7 @@ begin
  begin
   for i := 0 to Form2.ComponentCount - 1 do
     if Form2.Components[i] is TEdit then
-      TEdit(Form2.Components[i] as TEdit).Caption:=StringGrid1.Rows[StringGrid1.Row][i];  // найденный эдит очистить
+      TEdit(Form2.Components[i] as TEdit).Caption:=StringGrid1.Rows[StringGrid1.Row][i];
    end;
  Form2.title.Caption:='Заполните данные для изменения';
  Form2.addb.Caption:='Изменить';
